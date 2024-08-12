@@ -13,7 +13,7 @@ resource "aws_iam_openid_connect_provider" "stacks_openid_provider" {
 
 resource "aws_iam_role" "stacks_role" {
   name               = "stacks-${var.tfc_organization}-${var.tfc_project}-${var.tfc_stack}"
-  assume_role_policy = data.aws_iam_policty_document.stacks_role_policy.json
+  assume_role_policy = data.aws_iam_policy_document.stacks_role_policy.json
 }
 
 data "aws_iam_policy_document" "stacks_role_policy" {
