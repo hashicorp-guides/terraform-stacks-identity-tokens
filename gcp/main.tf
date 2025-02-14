@@ -36,7 +36,7 @@ provider "tfe" {}
 resource "tfe_variable_set" "variables" {
   name         = "gcp-stacks"
   description  = "Credentials for accessing GCP"
-  organization = var.tfc_organisation
+  organization = var.tfc_organization
 }
 
 resource "tfe_variable" "gcp_credentials" {
