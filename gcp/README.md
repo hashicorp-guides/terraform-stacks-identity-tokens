@@ -6,7 +6,7 @@ To execute this configuration you will need to give Terraform access to the rele
 
 More information on configuration here is available from the [documentation](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_reference#authentication).
 
-Once the Terraform configuration has been applied you should save the `varset` output as you will need them later.
+Once the Terraform configuration has been applied you should save the `workload_identity_pool_provider` and `service_account_email` outputs as you will need them later.
 
 ## Terraform Stacks
 
@@ -15,17 +15,14 @@ You can now authenticate a GCP provider in Stacks with the following setup:
 ```hcl
 # main.tfdeploy.hcl
 
-store "varset" "credentials" {
-  id       = <output.varset from earlier Terraform execution>
-  category = "terraform"  
+identity_token "jwt" {
+  audience = ["hcp.workload.identity"]
 }
 
-deployment "development" {
+deployment "staging" {
   inputs = {
-    google_project               = <the same project used in the setup>
-    google_region                = <the same region used in the setup>
-    google_credentials           = store.varset.credentials.gcp_credentials
-  }  
+    jwt = identity_token.jwt.jwt
+  }
 }
 
 ```
@@ -33,24 +30,29 @@ deployment "development" {
 ```hcl
 # main.tfstack.hcl
 
-variable "google_project" {
-  type = string
-}
-
-variable "google_region" {
-  type = string
-}
-
-variable "google_credentials" {
-  type      = string
-  ephemeral = true  
-}
-
 provider "google" "this" {
   config {
-    project     = var.google_project
-    region      = var.google_region
-    credentials = var.google_credentials
+    external_credentials {
+      audience = output.audience // audience from WIF
+      service_account_email = output.service_account_email // service account created from WIF
+      identity_token = var.jwt
+    }
   }
+}
+
+variable "jwt" {
+  type = string
+}
+
+component "storage_buckets" {
+    source = "./buckets"
+
+    inputs = {
+        jwt = var.jwt
+    }
+
+    providers = {
+        google    = provider.google.this
+    }
 }
 ```
