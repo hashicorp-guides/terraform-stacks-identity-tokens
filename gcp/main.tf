@@ -47,8 +47,8 @@ resource "google_project_service" "services" {
 # Create Workload Identity Pool (reference google_project_service to ensure APIs are enabled)
 resource "google_iam_workload_identity_pool" "terraform_stacks_pool" {
   depends_on = [google_project_service.services]
-  workload_identity_pool_id = "terraform-stacks-pool-3"
-  display_name              = "Terraform Stacks Pool-3"
+  workload_identity_pool_id = "terraform-stacks-pool"
+  display_name              = "Terraform Stacks Pool"
   description               = "Identity pool for Terraform Stacks authentication"
 }
 
