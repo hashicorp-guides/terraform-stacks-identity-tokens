@@ -15,13 +15,13 @@ You can now authenticate a GCP provider in Stacks with the following setup:
 ```hcl
 # main.tfdeploy.hcl
 
-identity_token "jwt" {
+identity_token "gcp" {
   audience = ["hcp.workload.identity"]
 }
 
 deployment "staging" {
   inputs = {
-    jwt = identity_token.jwt.jwt
+    jwt = identity_token.gcp.jwt
   }
 }
 
