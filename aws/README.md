@@ -29,7 +29,7 @@ deployment "development" {
 ```
 
 ```hcl
-# main.tfstack.hcl
+# main.tfcomponents.hcl
 
 variable "aws_token" {
   type      = string

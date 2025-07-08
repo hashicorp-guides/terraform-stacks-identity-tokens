@@ -28,7 +28,7 @@ deployment "staging" {
 ```
 
 ```hcl
-# main.tfstack.hcl
+# main.tfcomponents.hcl
 
 provider "google" "this" {
   config {
